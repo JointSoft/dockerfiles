@@ -1,5 +1,17 @@
-FROM alpine:3.9
+FROM alpine:3.13
 LABEL maintainer="Johannes Schickling <schickling.j@gmail.com>"
+
+RUN apk update
+
+RUN apk add --no-cache \
+        python3 \
+        py3-pip \
+    && pip3 install --upgrade pip \
+    && pip3 install \
+        awscli \
+    && rm -rf /var/cache/apk/*
+
+RUN aws --version   # Just to make sure its installed alright
 
 ADD install.sh install.sh
 RUN sh install.sh && rm install.sh
