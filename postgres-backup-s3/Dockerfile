@@ -13,8 +13,18 @@ RUN apk add --no-cache \
 
 RUN aws --version   # Just to make sure its installed alright
 
-ADD install.sh install.sh
-RUN sh install.sh && rm install.sh
+# install pg_dump
+RUN apk --no-cache add postgresql
+
+RUN apk --no-cache add curl
+
+# install go-cron
+RUN curl -L --insecure https://github.com/odise/go-cron/releases/download/v0.0.6/go-cron-linux.gz | zcat > /usr/local/bin/go-cron
+RUN chmod u+x /usr/local/bin/go-cron
+
+
+# cleanup
+RUN rm -rf /var/cache/apk/*
 
 ENV POSTGRES_DATABASE **None**
 ENV POSTGRES_HOST **None**
